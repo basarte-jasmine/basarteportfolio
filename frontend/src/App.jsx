@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import {
   aboutVideo,
@@ -134,37 +134,6 @@ function Skills() {
   )
 }
 
-function ProjectCard({ project }) {
-  return (
-    <GlassCard className="project-card">
-      <div className="project-media">
-        {project.video ? (
-          <video
-            src={project.video}
-            poster={project.image}
-            controls
-            muted
-            playsInline
-            preload="metadata"
-          />
-        ) : (
-          <img src={project.image} alt={project.title} />
-        )}
-      </div>
-      <div className="project-body">
-        <span className="project-type">{project.type}</span>
-        <h3>{project.title}</h3>
-        <p>{project.description}</p>
-        <div className="tag-row">
-          {project.tags.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </div>
-      </div>
-    </GlassCard>
-  )
-}
-
 function Projects() {
   const [activeFilter, setActiveFilter] = useState('All')
   const [activeProjectIndex, setActiveProjectIndex] = useState(0)
@@ -288,23 +257,84 @@ function Projects() {
 
 function Gallery() {
   const [galleryIndex, setGalleryIndex] = useState(0)
-  const [galleryMotion, setGalleryMotion] = useState('next')
-  const currentItem = designGallery[galleryIndex]
-  const previousItem =
-    designGallery[(galleryIndex - 1 + designGallery.length) % designGallery.length]
-  const nextItem = designGallery[(galleryIndex + 1) % designGallery.length]
+  const [isGalleryDragging, setIsGalleryDragging] = useState(false)
+  const [galleryDragProgress, setGalleryDragProgress] = useState(0)
+  const dragStartX = useRef(0)
+  const dragDeltaX = useRef(0)
+  const galleryPointerId = useRef(null)
+
+  const getCircularOffset = (index) => {
+    const halfGallery = designGallery.length / 2
+    let offset = index - galleryIndex
+
+    if (offset > halfGallery) {
+      offset -= designGallery.length
+    }
+
+    if (offset < -halfGallery) {
+      offset += designGallery.length
+    }
+
+    return offset + galleryDragProgress
+  }
+
+  const showGalleryItem = (targetIndex) => {
+    setGalleryDragProgress(0)
+    setGalleryIndex((targetIndex + designGallery.length) % designGallery.length)
+  }
 
   const showPrevious = () => {
-    setGalleryMotion('previous')
-    setGalleryIndex(
-      (currentIndex) =>
-        (currentIndex - 1 + designGallery.length) % designGallery.length,
-    )
+    showGalleryItem((galleryIndex - 1 + designGallery.length) % designGallery.length)
   }
 
   const showNext = () => {
-    setGalleryMotion('next')
-    setGalleryIndex((currentIndex) => (currentIndex + 1) % designGallery.length)
+    showGalleryItem((galleryIndex + 1) % designGallery.length)
+  }
+
+  const startGalleryDrag = (event) => {
+    dragStartX.current = event.clientX
+    dragDeltaX.current = 0
+    galleryPointerId.current = event.pointerId
+    setIsGalleryDragging(true)
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const moveGalleryDrag = (event) => {
+    if (!isGalleryDragging) {
+      return
+    }
+
+    const dragDistance = event.clientX - dragStartX.current
+    dragDeltaX.current = dragDistance
+    setGalleryDragProgress(Math.max(-1.35, Math.min(1.35, dragDistance / 260)))
+  }
+
+  const endGalleryDrag = (event) => {
+    if (!isGalleryDragging) {
+      return
+    }
+
+    const swipeDistance = 72
+
+    if (dragDeltaX.current > swipeDistance) {
+      showPrevious()
+    } else if (dragDeltaX.current < -swipeDistance) {
+      showNext()
+    } else {
+      setGalleryDragProgress(0)
+    }
+
+    setIsGalleryDragging(false)
+
+    if (
+      event?.currentTarget?.hasPointerCapture &&
+      galleryPointerId.current !== null &&
+      event.currentTarget.hasPointerCapture(galleryPointerId.current)
+    ) {
+      event.currentTarget.releasePointerCapture(galleryPointerId.current)
+    }
+
+    galleryPointerId.current = null
   }
 
   return (
@@ -314,49 +344,61 @@ function Gallery() {
         work.
       </SectionHeader>
 
-      <div className="gallery-carousel" aria-live="polite">
-        <button
-          aria-label={`Show previous design, ${previousItem.title}`}
-          className="gallery-preview preview-previous"
-          onClick={showPrevious}
-          type="button"
-        >
-          <img src={previousItem.image} alt="" />
-          <span>{previousItem.title}</span>
-        </button>
-
-        <div className={`gallery-feature ${galleryMotion}`} key={currentItem.title}>
-          <img src={currentItem.image} alt={currentItem.title} />
-          <div className="gallery-caption">
-            <span>
-              {String(galleryIndex + 1).padStart(2, '0')} /{' '}
-              {String(designGallery.length).padStart(2, '0')}
-            </span>
-            <h3>{currentItem.title}</h3>
-          </div>
-          <div className="gallery-controls">
-            <button
-              aria-label="Previous gallery item"
-              onClick={showPrevious}
-              type="button"
-            >
-              Prev
-            </button>
-            <button aria-label="Next gallery item" onClick={showNext} type="button">
-              Next
-            </button>
-          </div>
+      <div className="gallery-showcase">
+        <div className="gallery-controls">
+          <button
+            aria-label="Previous gallery item"
+            onClick={showPrevious}
+            type="button"
+          >
+            Prev
+          </button>
+          <button aria-label="Next gallery item" onClick={showNext} type="button">
+            Next
+          </button>
         </div>
 
-        <button
-          aria-label={`Show next design, ${nextItem.title}`}
-          className="gallery-preview preview-next"
-          onClick={showNext}
-          type="button"
+        <div
+          aria-label="Draggable design gallery"
+          aria-live="polite"
+          className={`gallery-carousel ${isGalleryDragging ? 'dragging' : ''}`}
+          onPointerCancel={endGalleryDrag}
+          onPointerDown={startGalleryDrag}
+          onPointerMove={moveGalleryDrag}
+          onPointerUp={endGalleryDrag}
         >
-          <img src={nextItem.image} alt="" />
-          <span>{nextItem.title}</span>
-        </button>
+          <div className="gallery-track">
+            {designGallery.map((item, index) => {
+              const cardOffset = getCircularOffset(index)
+              const absOffset = Math.abs(cardOffset)
+
+              return (
+                <article
+                  className={`gallery-slide ${
+                    galleryIndex === index ? 'active' : ''
+                  }`}
+                  key={item.title}
+                  style={{
+                    '--abs-offset': absOffset,
+                    '--offset': cardOffset,
+                    zIndex: 20 - Math.round(absOffset * 4),
+                  }}
+                >
+                  <div className="gallery-artwork">
+                    <img src={item.image} alt={item.title} />
+                  </div>
+                  <div className="gallery-info">
+                    <span>
+                      {String(index + 1).padStart(2, '0')} /{' '}
+                      {String(designGallery.length).padStart(2, '0')}
+                    </span>
+                    <h3>{item.title}</h3>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
       <div className="gallery-dots" aria-label="Gallery items">
@@ -366,10 +408,7 @@ function Gallery() {
             aria-selected={galleryIndex === index}
             className={galleryIndex === index ? 'active' : ''}
             key={item.title}
-            onClick={() => {
-              setGalleryMotion(index > galleryIndex ? 'next' : 'previous')
-              setGalleryIndex(index)
-            }}
+            onClick={() => showGalleryItem(index)}
             type="button"
           />
         ))}
@@ -399,6 +438,31 @@ function Contact() {
 }
 
 function App() {
+  useEffect(() => {
+    const animatedSections = document.querySelectorAll(
+      '.hero-section, .page-section',
+    )
+
+    animatedSections.forEach((section) => {
+      section.classList.add('reveal-on-scroll')
+    })
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+          }
+        })
+      },
+      { threshold: 0.18 },
+    )
+
+    animatedSections.forEach((section) => sectionObserver.observe(section))
+
+    return () => sectionObserver.disconnect()
+  }, [])
+
   return (
     <>
       <Navbar />

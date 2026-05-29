@@ -12,6 +12,8 @@ import {
   stats,
 } from './data/portfolio'
 
+const navItems = ['About', 'Skills', 'Projects', 'Gallery', 'Contact']
+
 function SectionHeader({ eyebrow, title, children }) {
   return (
     <div className="section-header">
@@ -27,7 +29,36 @@ function GlassCard({ className = '', children }) {
 }
 
 function Navbar() {
-  const navItems = ['About', 'Skills', 'Projects', 'Gallery', 'Contact']
+  const [activeSection, setActiveSection] = useState('home')
+
+  useEffect(() => {
+    const sectionIds = ['home', ...navItems.map((item) => item.toLowerCase())]
+    const sections = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter(Boolean)
+
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((firstEntry, secondEntry) => {
+            return secondEntry.intersectionRatio - firstEntry.intersectionRatio
+          })[0]
+
+        if (visibleEntry) {
+          setActiveSection(visibleEntry.target.id)
+        }
+      },
+      {
+        rootMargin: '-34% 0px -46% 0px',
+        threshold: [0.12, 0.3, 0.55],
+      },
+    )
+
+    sections.forEach((section) => navObserver.observe(section))
+
+    return () => navObserver.disconnect()
+  }, [])
 
   return (
     <header className="site-header">
@@ -36,7 +67,12 @@ function Navbar() {
       </a>
       <nav aria-label="Primary navigation">
         {navItems.map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`}>
+          <a
+            aria-current={activeSection === item.toLowerCase() ? 'page' : undefined}
+            className={activeSection === item.toLowerCase() ? 'active' : ''}
+            key={item}
+            href={`#${item.toLowerCase()}`}
+          >
             {item}
           </a>
         ))}

@@ -78,19 +78,19 @@ export const projects = [
     title: 'Bawat Tala',
     type: 'Mobile App',
     description:
-      'A mobile app project where I focused on simple screens, readable layouts, and a flow that feels easy to follow.',
+      'An AI-integrated journaling platform built to foster student wellness and simplify mental health tracking through a clean, accessible interface and reflective journaling flow.',
     image: bawattalaImage,
     filters: ['Development', 'Design'],
-    tags: ['Journal', 'UI', 'App'],
+    tags: ['Journal', 'AI-Integration', 'App'],
   },
   {
     title: 'Student Management System',
     type: 'System',
     description:
-      'A school records system for managing student information in a more organized and searchable way.',
+      'A Student Management System dashboard for managing student records, enabling efficient grade tracking, automated categorization, and interactive data filtering.',
     image: studentSystemImage,
     filters: ['Development'],
-    tags: ['System', 'Database', 'Admin'],
+    tags: ['System', 'Database', 'Dashboard'],
   },
   {
     title: 'PLV VTHK Tigers Equipment Inventory System',
@@ -105,7 +105,7 @@ export const projects = [
     title: 'Event Evaluation System',
     type: 'System',
     description:
-      'A system for collecting event feedback and turning responses into easier-to-review results.',
+      'A streamlined feedback management platform designed to automate event evaluations, turning attendee responses into structured, actionable insights.',
     image: evaluationImage,
     filters: ['Development'],
     tags: ['Evaluation', 'Reports', 'Forms'],
@@ -114,16 +114,16 @@ export const projects = [
     title: 'SJAV Website',
     type: 'Website',
     description:
-      'A responsive website project where I worked on page structure, spacing, and content presentation.',
+      'A welcoming and informative school website designed to help parents and students easily access essential contact details, admission information, and upcoming announcements.',
     image: sjavImage,
     filters: ['Development', 'Design'],
-    tags: ['Website', 'Responsive', 'Frontend'],
+    tags: ['Web Design', 'Information Portal', 'School Community'],
   },
   {
     title: 'Customer Satisfaction Survey',
     type: 'Website',
     description:
-      'A web-based survey form for gathering customer feedback without making the process feel complicated.',
+      'A user-friendly survey platform designed to help organizations easily gather and understand customer feedback through a clean and intuitive digital interface.',
     image: surveyImage,
     filters: ['Development'],
     tags: ['Survey', 'Forms', 'Web'],
@@ -132,39 +132,39 @@ export const projects = [
     title: 'CEIT Website',
     type: 'Website',
     description:
-      'A department website concept with academic content arranged in a cleaner, more browsable layout.',
+      'A department website concept focused on creating a clean, organized, and easy-to-navigate space for students to explore academic resources and campus facilities.',
     image: ceitImage,
     filters: ['Development', 'Design'],
     tags: ['Academic', 'Website', 'UI'],
   },
   {
-    title: 'Larong Kapalaran',
+    title: 'Laro ng Kapalaran',
     type: 'Hybrid Mobile Game',
     description:
-      'A hybrid mobile game project with a demo reel showing the main gameplay and interaction flow.',
+      'A haunting hybrid mobile game that blends survival mechanics with classic Filipino folklore, where players must outsmart curses in a tense, high-stakes tabletop environment.',
     image: larongKapalaranImage,
     video: larongKapalaranVideo,
     filters: ['Games', 'Development'],
-    tags: ['Hybrid', 'Mobile Game', 'Demo Reel'],
+    tags: ['Hybrid', 'Mobile Game', 'Filipino Folklore'],
   },
   {
     title: 'Game of Hunters',
     type: 'Desktop Game',
     description:
-      'A desktop game project with recorded gameplay that shows the core mechanics and player movement.',
+      'Blending Filipino folklore with fast-paced survival horror, this project challenges players to explore dangerous, haunted rooms, gather powerful relics, and outlast escalating waves of mythical creatures.',
     image: gameHuntersImage,
     video: gameHuntersVideo,
     filters: ['Games', 'Development'],
-    tags: ['Desktop Game', 'Gameplay', 'Demo Reel'],
+    tags: ['Desktop Game', 'Folklore-Inspired', 'Survival Horror'],
   },
   {
     title: 'Lost in the Archipelago',
     type: 'Desktop Game',
     description:
-      'A desktop game concept built around exploration, level atmosphere, and interactive play.',
+      'A narrative-driven adventure game centered on time-travel, strategic decision-making, and moral complexity, offering players multiple paths to navigate the tensions between colonial authorities and resistance movements.',
     image: lostArchipelagoImage,
     filters: ['Games', 'Development'],
-    tags: ['Desktop Game', 'Adventure', 'Concept'],
+    tags: ['Narrative-Driven', 'Adventure', 'Historical RPG'],
   },
   {
     title: 'Kiddie Coin',
@@ -188,7 +188,7 @@ export const projects = [
     title: 'Trackflix',
     type: 'UI/UX Mobile Concept',
     description:
-      'A media tracker concept with screens for browsing, saving, and organizing shows or movies.',
+      'A streamlined mobile interface concept designed for effortless media tracking, allowing users to discover, save, and organize their favorite movies and TV shows in one place.',
     image: trackflixImage,
     filters: ['Design'],
     tags: ['Figma', 'Mobile UI', 'Media'],

@@ -28,6 +28,29 @@ function GlassCard({ className = '', children }) {
   return <article className={`glass-card ${className}`}>{children}</article>
 }
 
+function SocialIcon({ name }) {
+  const icons = {
+    email: (
+      <path d="M4 6.8A2.8 2.8 0 0 1 6.8 4h10.4A2.8 2.8 0 0 1 20 6.8v10.4a2.8 2.8 0 0 1-2.8 2.8H6.8A2.8 2.8 0 0 1 4 17.2V6.8Zm2.3.15 5.7 4.31 5.7-4.31a.9.9 0 0 0-.5-.15H6.8a.9.9 0 0 0-.5.15Zm11.9 2.19-5.66 4.29a.9.9 0 0 1-1.08 0L5.8 9.14v8.06c0 .55.45 1 1 1h10.4c.55 0 1-.45 1-1V9.14Z" />
+    ),
+    github: (
+      <path d="M12 2.7a9.4 9.4 0 0 0-2.97 18.32c.47.08.64-.2.64-.45v-1.6c-2.62.57-3.17-1.12-3.17-1.12-.43-1.08-1.05-1.37-1.05-1.37-.86-.59.06-.58.06-.58.95.07 1.45.98 1.45.98.84 1.44 2.2 1.02 2.74.78.08-.61.33-1.02.6-1.26-2.09-.24-4.29-1.05-4.29-4.65 0-1.03.37-1.87.97-2.53-.1-.24-.42-1.2.1-2.5 0 0 .8-.25 2.59.97A8.9 8.9 0 0 1 12 6.39c.8 0 1.59.11 2.34.31 1.79-1.22 2.58-.97 2.58-.97.52 1.3.2 2.26.1 2.5.61.66.97 1.5.97 2.53 0 3.61-2.2 4.4-4.3 4.64.34.3.64.87.64 1.76v2.61c0 .25.17.54.65.45A9.4 9.4 0 0 0 12 2.7Z" />
+    ),
+    linkedin: (
+      <path d="M6.7 8.8H3.9v11.1h2.8V8.8ZM5.3 4.1a1.63 1.63 0 1 0 0 3.26 1.63 1.63 0 0 0 0-3.26Zm14.6 9.75c0-3.17-1.69-4.64-3.94-4.64-1.82 0-2.63 1-3.08 1.7V8.8h-2.8v11.1h2.8v-6.2c0-1.66.31-3.27 2.37-3.27 2.03 0 2.06 1.9 2.06 3.37v6.1h2.8l-.01-6.05Z" />
+    ),
+    facebook: (
+      <path d="M21.2 12a9.2 9.2 0 1 0-10.64 9.09v-6.43H8.22V12h2.34V9.97c0-2.31 1.37-3.58 3.47-3.58.68 0 1.35.06 2.02.18v2.22h-1.14c-1.12 0-1.47.7-1.47 1.41V12h2.51l-.4 2.66h-2.11v6.43A9.2 9.2 0 0 0 21.2 12Z" />
+    ),
+  }
+
+  return (
+    <svg aria-hidden="true" className="contact-icon" viewBox="0 0 24 24">
+      {icons[name]}
+    </svg>
+  )
+}
+
 function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
 
@@ -456,18 +479,39 @@ function Gallery() {
 function Contact() {
   return (
     <section className="page-section contact-section" id="contact">
-      <SectionHeader eyebrow="Contact" title="Reach me here">
-        For project questions, collaboration, or just to see more of my work,
-        these are the best places to find me.
-      </SectionHeader>
-
-      <div className="contact-grid">
-        {contactLinks.map((link) => (
-          <a className="contact-link" href={link.href} key={link.label}>
-            <span>{link.label}</span>
-            <strong>{link.value}</strong>
+      <div className="contact-shell">
+        <div className="contact-intro">
+          <SectionHeader eyebrow="Contact" title="Let's connect">
+            For project questions, collaboration, or to see more of my work,
+            these are the best places to reach me.
+          </SectionHeader>
+          <a className="contact-primary" href="mailto:basartejasmine@gmail.com">
+            Send an email
           </a>
-        ))}
+        </div>
+
+        <div className="contact-grid">
+          {contactLinks.map((link) => (
+            <a
+              className="contact-link"
+              href={link.href}
+              key={link.label}
+              rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+            >
+              <span className="contact-icon-wrap">
+                <SocialIcon name={link.icon} />
+              </span>
+              <span className="contact-link-copy">
+                <span>{link.label}</span>
+                <strong>{link.value}</strong>
+              </span>
+              <span className="contact-arrow" aria-hidden="true">
+                -&gt;
+              </span>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   )

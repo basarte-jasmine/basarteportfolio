@@ -217,8 +217,28 @@ export const designGallery = [
 ]
 
 export const contactLinks = [
-  { label: 'Email', value: 'Email', href: 'mailto:jasminebasarte@example.com' },
-  { label: 'GitHub', value: 'GitHub', href: 'https://github.com/' },
-  { label: 'LinkedIn', value: 'LinkedIn', href: 'https://www.linkedin.com/' },
-  { label: 'Facebook', value: 'Facebook', href: 'https://www.facebook.com/' },
+  {
+    icon: 'email',
+    label: 'Email',
+    value: 'Email me directly',
+    href: 'mailto:basartejasmine@gmail.com',
+  },
+  {
+    icon: 'github',
+    label: 'GitHub',
+    value: 'View my GitHub',
+    href: 'https://github.com/basarte-jasmine',
+  },
+  {
+    icon: 'linkedin',
+    label: 'LinkedIn',
+    value: 'Connect on LinkedIn',
+    href: 'https://www.linkedin.com/in/jasmine-basarte-804520411',
+  },
+  {
+    icon: 'facebook',
+    label: 'Facebook',
+    value: 'Message me on Facebook',
+    href: 'https://www.facebook.com/24114332243315.jas',
+  },
 ]
